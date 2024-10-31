@@ -8,7 +8,7 @@ import { getWasteCollectionTasks, updateTaskStatus, saveReward, saveCollectedWas
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
 // Make sure to set your Gemini API key in your environment variables
-const geminiApiKey = "AIzaSyAUqGpo5S_sx8Q9t9n8g7v-uNRmaDDDwIQ";
+const geminiApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
 type CollectionTask = {
   id: number
@@ -150,7 +150,10 @@ export default function CollectPage() {
       const text = response.text()
       
       try {
-        const parsedResult = JSON.parse(text)
+        const trimmedText = text.trim();
+        const cleanedText = trimmedText.replace(/[^\x20-\x7E]/g, ''); // Remove non-printable characters
+        const parsedResult = JSON.parse(cleanedText);
+        
         setVerificationResult({
           wasteTypeMatch: parsedResult.wasteTypeMatch,
           quantityMatch: parsedResult.quantityMatch,

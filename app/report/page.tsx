@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast'
 
 
-const geminiApiKey = "AIzaSyAUqGpo5S_sx8Q9t9n8g7v-uNRmaDDDwIQ";
+const geminiApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const googleMapsApiKey = "AIzaSyCRoEppeKt_E9FDPctBWqa5gkHfxJHyQFc";
 
 const libraries: Libraries = ['places'];
@@ -127,7 +127,7 @@ export default function ReportPage() {
         }`;
 
       const result = await model.generateContent([prompt, ...imageParts]);
-      const response = await result.response;
+      const response =  result.response;
       const text = await response.text();
       console.log('Response text:', text); // Log the raw response text
       console.log('Type of response text:', typeof text); // Log the type
@@ -137,13 +137,15 @@ export default function ReportPage() {
         const trimmedText = text.trim();
         const cleanedText = trimmedText.replace(/[^\x20-\x7E]/g, ''); // Remove non-printable characters
         const parsedResult = JSON.parse(cleanedText);
+        console.log('Parsed result:', JSON.stringify(parsedResult, null, 2));
+
         const isValidQuantity = /^[0-9]*\.?[0-9]+\s*[a-zA-Z]+$/.test(parsedResult.quantity); // Allow numbers with units
         const isValidConfidence = typeof parsedResult.confidence === 'number' && 
                                   parsedResult.confidence >= 0 && 
                                   parsedResult.confidence <= 1;
   
-          
-        if ( parsedResult.wasteType &&parsedResult.confidence && parsedResult.quantity ){
+       
+        if ( parsedResult.wasteType && parsedResult.confidence && parsedResult.quantity || parsedResult.wasteType && isValidQuantity && isValidConfidence){
           console.log(parsedResult);
           setVerificationResult(parsedResult);
           setVerificationStatus('success');
