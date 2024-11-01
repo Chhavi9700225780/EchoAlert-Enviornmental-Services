@@ -161,7 +161,7 @@ export default function CollectPage() {
         })
         setVerificationStatus('success')
         
-        if (parsedResult.wasteTypeMatch && parsedResult.quantityMatch && parsedResult.confidence > 0.7) {
+        if (parsedResult.wasteTypeMatch || parsedResult.quantityMatch && parsedResult.confidence > 0.7) {
           await handleStatusChange(selectedTask.id, 'verified')
           const earnedReward = Math.floor(Math.random() * 50) + 10 // Random reward between 10 and 59
           

@@ -3,10 +3,10 @@ export default {
     schema: "./utils/db/schema.ts",
     out: "./drizzle",
     dbCredentials: {
-      url:  "postgresql://chhavidb_owner:U7WhjfJLdmI9@ep-muddy-credit-a85c8htf.eastus2.azure.neon.tech/chhavidb?sslmode=require",
+      url:  "postgresql://chhavi_db_owner:6pJvlDaHiU2e@ep-crimson-sun-a5l33hy1.us-east-2.aws.neon.tech/chhavi_db?sslmode=require",
   
       connectionString:
-      "postgresql://chhavidb_owner:U7WhjfJLdmI9@ep-muddy-credit-a85c8htf.eastus2.azure.neon.tech/chhavidb?sslmode=require",
+      "postgresql://chhavi_db_owner:6pJvlDaHiU2e@ep-crimson-sun-a5l33hy1.us-east-2.aws.neon.tech/chhavi_db?sslmode=require",
   
       },
   };

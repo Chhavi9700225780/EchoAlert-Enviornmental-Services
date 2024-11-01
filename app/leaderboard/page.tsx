@@ -1,10 +1,9 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { getAllRewards, getUserByEmail } from '@/utils/db/actions'
+import { getAllRewards,getAvailableRewards, getUserByEmail } from '@/utils/db/actions'
 import { Loader, Award, User, Trophy, Crown } from 'lucide-react'
 import { toast } from 'react-hot-toast'
-import { Button } from '@/components/ui/button'
-import { or } from 'drizzle-orm'
+
 type Reward = {
   id: number
   userId: number
@@ -16,61 +15,37 @@ type Reward = {
 
 export default function LeaderboardPage() {
   const [rewards, setRewards] = useState<Reward[]>([])
-  const [reward, setReward] = useState<Reward[]>([])
-  const [ans, setAns] = useState<Reward[]>([])
-  
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<{ id: number; email: string; name: string } | null>(null)
-   let sum=0;
+
   useEffect(() => {
     const fetchRewardsAndUser = async () => {
       setLoading(true)
       try {
         const fetchedRewards = await getAllRewards()
-        console.log("Result:",fetchedRewards);
-        sum =  sum +  fetchedRewards[0].points;
-
-        for(let i=1;i<fetchedRewards.length; i++){
-          
-           console.log("Sum:",sum);
-           
-            if(fetchedRewards[i-1].userId == fetchedRewards[i].userId){
-              sum =  sum +  fetchedRewards[i].points;
-              console.log("i",i);
-            }
-             else{
-              console.log("i",i);
-              reward.push({
-                id: fetchedRewards[i-1].id,
-                userId: fetchedRewards[i-1].userId,
-                points: sum,
-                level: fetchedRewards[i-1].level,
-                createdAt: fetchedRewards[i-1].createdAt,
-                userName: fetchedRewards[i-1].userName
-              })
-               sum=0;
-            }
-            if(i == fetchedRewards.length - 1 && fetchedRewards[i-1].userId == fetchedRewards[i].userId){
-              reward.push({
-                id: fetchedRewards[i-1].id,
-                userId: fetchedRewards[i-1].userId,
-                points: sum,
-                level: fetchedRewards[i-1].level,
-                createdAt: fetchedRewards[i-1].createdAt,
-                userName: fetchedRewards[i-1].userName
-              })
-            }
-          
-        };
-        console.log("Reward:",reward);
-
-        const uniqueRewards = Array.from(new Set(reward.map(item => JSON.stringify(item)))).map(item => JSON.parse(item));
-
-        console.log(uniqueRewards);
-         setAns(uniqueRewards);
+        console.log("Result:", fetchedRewards);
        
-        setRewards(fetchedRewards)
+        // Correcting the typo in the original array
         
+        
+      
+        
+        const uniqueResult:any = {};
+
+        fetchedRewards.forEach(({ id,userId, points,level,userName }) => {
+          if (uniqueResult[userId]) {
+            uniqueResult[userId].points += points; // Add points if id exists
+          } else {
+            uniqueResult[userId] = { id, userId, points,level,userName }; // Initialize the entry if it does not exist
+          }
+        });
+        
+        // Convert the uniqueResult object back to an array of objects
+        const finalResult :any = Object.values(uniqueResult);
+        
+        console.log(finalResult);
+        setRewards(finalResult);
+
         const userEmail = localStorage.getItem('userEmail')
         if (userEmail) {
           const fetchedUser = await getUserByEmail(userEmail)
@@ -91,19 +66,12 @@ export default function LeaderboardPage() {
     }
 
     fetchRewardsAndUser()
-    
-  }, []);
+  }, [])
 
- 
-  
-    
-  
   return (
     <div className="">
-      <div className="  ">
-
-      <h1
-       className="text-3xl font-semibold mb-6 text-gray-800">Leaderboard </h1>
+      <div className="max-w-3xl mx-auto">
+      <h1 className="text-3xl font-semibold mb-6 text-gray-800">Leaderboard </h1>
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
@@ -129,8 +97,8 @@ export default function LeaderboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {ans.map((reward, index) => (
-                    <tr key={reward.id} className={`${user && user.id === reward.userId ? 'bg-indigo-50' : ''} hover:bg-gray-50 transition-colors duration-150 ease-in-out`}>
+                  {rewards.map((reward, index) => (
+                    <tr key={reward.userId} className={`${user && user.id === reward.userId ? 'bg-indigo-50' : ''} hover:bg-gray-50 transition-colors duration-150 ease-in-out`}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {index < 3 ? (
