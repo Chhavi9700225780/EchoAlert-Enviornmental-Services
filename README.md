@@ -22,8 +22,8 @@ EcoAlert is an innovative platform designed to empower users in managing waste e
 - ⚛️ **Next.js**: A React framework for building server-rendered applications.
 - 🦸‍♂️ **TypeScript**: A superset of JavaScript that adds static types for better code quality.
 - 🌐 **Web3 Authentication**: For secure user profile creation and management.
-- 🤖 **Gemini AI**: For image analysis and waste verification.
-- 💾 **Firebase**: For real-time database and user authentication.
+- 🤖 **AI**: For image analysis and waste verification.
+- 💾 **PostgreSQL**: For real-time database and user authentication.
 
 ## Usage
 
