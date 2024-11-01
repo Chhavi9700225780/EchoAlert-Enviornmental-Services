@@ -3,4 +3,23 @@
     margin-left: -15px;    
    
     }
+    
+  }
+  @media (max-width: 400px) {
+    .leader{
+    max-width: 100%;
+    
+    }
+    
+    
+  }
+  @media (max-width: 385px) {
+    .leader{
+      margin-left: -20px;    
+   
+    max-width: 100%;
+    
+    }
+    
+    
   }

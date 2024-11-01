@@ -71,7 +71,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="">
-      <div className="max-w-3xl mx-auto leader p-4">
+      <div className="max-w-3xl mx-auto leader  p-4">
       <h1 className="text-3xl font-semibold mb-6 text-gray-800">Leaderboard </h1>
 
         {loading ? (
