@@ -8,6 +8,7 @@ import { Libraries } from '@react-google-maps/api';
 import { createUser, getUserByEmail, createReport, getRecentReports } from '@/utils/db/actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast'
+import './styles.css';
 
 
 const geminiApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
@@ -238,11 +239,11 @@ export default function ReportPage() {
 
 
   return (
-    <div className='  '>
-    <div className="p-4 md:p-8 max-w-4xl mx-auto ">
+    
+    <div className="p-8 report max-w-4xl mx-auto ">
       <h1 className="text-3xl font-semibold mb-6 text-gray-800">Report waste</h1>
       
-      <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-2xl shadow-lg mb-12">
+      <form onSubmit={handleSubmit} className="bg-white  p-8 rounded-2xl shadow-lg mb-12">
         <div className="mb-8">
           <label htmlFor="waste-image" className="block text-lg font-medium text-gray-700 mb-2">
             Upload Waste Image
@@ -301,7 +302,7 @@ export default function ReportPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
             <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">Location</label>
             {isLoaded ? (
@@ -381,22 +382,22 @@ export default function ReportPage() {
           <table className="w-full">
             <thead className="bg-gray-50 sticky top-0">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {reports.map((report) => (
                 <tr key={report.id} className="hover:bg-gray-50 transition-colors duration-200">
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <MapPin className="inline-block w-4 h-4 mr-2 text-green-500" />
                     {report.location}
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{report.wasteType}</td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{report.amount}</td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{report.createdAt}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{report.wasteType}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{report.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{report.createdAt}</td>
                 </tr>
               ))}
             </tbody>
@@ -404,6 +405,6 @@ export default function ReportPage() {
         </div>
       </div>
     </div>
-    </div>
+    
   )
 }

@@ -1,0 +1,6 @@
+@media (max-width: 640px) {
+    .report{
+    margin-left: -18px;    
+    max-width: 70%;
+    }
+  }

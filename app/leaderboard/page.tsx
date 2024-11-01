@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react'
 import { getAllRewards,getAvailableRewards, getUserByEmail } from '@/utils/db/actions'
 import { Loader, Award, User, Trophy, Crown } from 'lucide-react'
-import { toast } from 'react-hot-toast'
+import { toast } from 'react-hot-toast';
+import './styles.css';
 
 type Reward = {
   id: number
@@ -70,7 +71,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto leader p-4">
       <h1 className="text-3xl font-semibold mb-6 text-gray-800">Leaderboard </h1>
 
         {loading ? (
@@ -90,16 +91,16 @@ export default function LeaderboardPage() {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Rank</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Points</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Level</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Rank</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Points</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Level</th>
                   </tr>
                 </thead>
                 <tbody>
                   {rewards.map((reward, index) => (
                     <tr key={reward.userId} className={`${user && user.id === reward.userId ? 'bg-indigo-50' : ''} hover:bg-gray-50 transition-colors duration-150 ease-in-out`}>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {index < 3 ? (
                             <Crown className={`h-6 w-6 ${index === 0 ? 'text-yellow-400' : index === 1 ? 'text-gray-400' : 'text-yellow-600'}`} />
@@ -108,7 +109,7 @@ export default function LeaderboardPage() {
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
                             <User className="h-full w-full rounded-full bg-gray-200 text-gray-500 p-2" />
@@ -118,14 +119,14 @@ export default function LeaderboardPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <Award className="h-5 w-5 text-indigo-500 mr-2" />
                           <div className="text-sm font-semibold text-gray-900">{reward.points.toLocaleString()}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
                           Level {reward.level}
                         </span>
                       </td>

@@ -1,0 +1,11 @@
+
+@media (max-width: 640px) {
+    .home{
+    margin-left: 51px;    
+    max-width: 70%;
+    }
+    .edit{
+        font-size: 30px;
+        display: block;
+    }
+  }

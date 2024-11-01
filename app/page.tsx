@@ -13,6 +13,8 @@ const poppins = Poppins({
   display: 'swap',
 })
 
+import './styles.css';
+
 function AnimatedGlobe() {
   return (
     <div className="relative w-32 h-32 mx-auto mb-8">
@@ -79,11 +81,11 @@ export default function Home() {
   };
 
   return (
-    <div className={`container mx-auto px-4 py-16 ${poppins.className}`}>
+    <div className={`container mx-auto home px-4 py-16 ${poppins.className}`}>
       <section className="text-center mb-20">
         <AnimatedGlobe />
         <h1 className="text-6xl font-bold mb-6 text-gray-800 tracking-tight">
-          EcoAlert <span className="text-green-600">Enviornmental Service</span>
+          EcoAlert <span className=" edit text-green-600">Enviornmental Service</span>
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed mb-8">
           Join our community in making waste management more efficient and rewarding!
