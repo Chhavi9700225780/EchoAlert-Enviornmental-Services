@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EcoAlert: Environmental Services 🌍
 
-## Getting Started
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Usage](#usage)
+- [What's Next](#whats-next)
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Project Overview
+EcoAlert is an innovative platform designed to empower users in managing waste effectively. By leveraging AI technology, users can photograph waste, receive instant analysis of its type and quantity, and submit reports to earn points. The application also features a leaderboard to foster community engagement and friendly competition.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
+- 📸 **Waste Verification**: Upload images of waste to receive AI-driven analysis on type, quantity, and confidence.
+- 🎯 **Points System**: Earn points for reporting waste and participating in eco-friendly activities.
+- 🏆 **Leaderboard**: Track your progress and compare your points with others in the community.
+- 🌱 **Community Engagement**: Participate in challenges and events aimed at promoting sustainability.
+- 📚 **Educational Resources**: Access informative content about waste management and environmental practices.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Technologies Used
+- ⚛️ **Next.js**: A React framework for building server-rendered applications.
+- 🦸‍♂️ **TypeScript**: A superset of JavaScript that adds static types for better code quality.
+- 🌐 **Web3 Authentication**: For secure user profile creation and management.
+- 🤖 **Gemini AI**: For image analysis and waste verification.
+- 💾 **Firebase**: For real-time database and user authentication.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Usage
 
-## Learn More
+1. **Sign Up / Log In**: 
+   - Visit the EcoAlert homepage and either create a new account or log in using your existing Web3 credentials.
 
-To learn more about Next.js, take a look at the following resources:
+2. **Upload Waste Images**: 
+    - Click on the "Upload Waste Image" button to select and upload a photo of the waste item you want to report.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Verify Waste**: 
+   - Once the image is uploaded, click the "Verify Waste" button. The AI will analyze the image and provide results on the type of waste, estimated quantity, and confidence level.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Submit Report**: 
+   - After verification, fill in the required details (location, waste type, estimated amount) and click "Submit Report" to save your entry and earn points.
 
-## Deploy on Vercel
+5. **View Leaderboard**: 
+   - Navigate to the leaderboard section to see your ranking and compare your points with other users.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Track Your Progress**: 
+   - Keep an eye on your points, achievements, and contributions to the EcoAlert community.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+By following these steps, you can effectively utilize EcoAlert to make a positive impact on the environment while earning rewards!
+
+## What's Next
+- Enhance AI capabilities for broader waste type recognition.
+- Expand the gamification features with redeemable rewards.
+- Build partnerships with local environmental organizations.
+- Improve educational resources within the app.
+- Implement more interactive features to foster community engagement.
+
+
+Thank you for your interest in EcoAlert! Together, we can make a difference in managing waste and promoting sustainability. 🌿
