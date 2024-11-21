@@ -1,22 +1,21 @@
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { MapPin, Trash, Coins, Medal, Settings, Home, Car, Book, BookOpen } from "lucide-react"
+import { MapPin, Trash, Coins, Medal, Settings, Home, Car } from "lucide-react"
 
 const sidebarItems = [
   { href: "/", icon: Home, label: "Home" },
-  { href: "/report", icon: MapPin, label: "Report Waste" },
-  { href: "/blog", icon: BookOpen, label: "Blogs" },
-  { href: "/rewards", icon: Coins, label: "Rewards" },
-  { href: "/leaderboard", icon: Medal, label: "Leaderboard" },
-  
+  { href: "/recents", icon: MapPin, label: "Recent Reports" },
+  { href: "/collect", icon: Trash, label: "Collect Waste" },
+  { href: "/blog", icon: Coins, label: "Blog" },
+ 
 ]
 
 interface SidebarProps {
   open: boolean
 }
 
-export default function Sidebar({ open }: SidebarProps) {
+export default function SidebarOrg({ open }: SidebarProps) {
   const pathname = usePathname()
 
   return (
@@ -40,11 +39,11 @@ export default function Sidebar({ open }: SidebarProps) {
           ))}
         </div>
         <div className="p-4 border-t border-gray-200">
-          <Link href="/settings" passHref>
+          <Link href="/about" passHref>
             <Button 
-              variant={pathname === "/settings" ? "secondary" : "outline"}
+              variant={pathname === "/about" ? "secondary" : "outline"}
               className={`w-full py-3 ${
-                pathname === "/settings"
+                pathname === "/about"
                   ? "bg-green-100 text-green-800"
                   : "text-gray-600 border-gray-300 hover:bg-gray-100"
               }`} 

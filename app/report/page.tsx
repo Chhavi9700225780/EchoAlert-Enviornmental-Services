@@ -5,14 +5,16 @@ import { Button } from '@/components/ui/button'
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { StandaloneSearchBox,  useJsApiLoader } from '@react-google-maps/api'
 import { Libraries } from '@react-google-maps/api';
-import { createUser, getUserByEmail, createReport, getRecentReports } from '@/utils/db/actions';
+import { createUser, getUserByEmail, createReport, getRecentReports ,saveReward} from '@/utils/db/actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast'
 import './styles.css';
+import { Description } from '@radix-ui/react-toast';
+import { userInfo } from 'os';
 
-
+ 
 const geminiApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-const googleMapsApiKey = "AIzaSyCRoEppeKt_E9FDPctBWqa5gkHfxJHyQFc";
+const googleMapsApiKey = "AIzaSyAO2vCIJFE9J0ZPRDEtVrTlJwbFyNd16AI";
 
 const libraries: Libraries = ['places'];
 
@@ -25,6 +27,7 @@ export default function ReportPage() {
     location: string;
     wasteType: string;
     amount: string;
+    description: string;
     createdAt: string;
   }>>([]);
 
@@ -32,6 +35,7 @@ export default function ReportPage() {
     location: '',
     type: '',
     amount: '',
+    description: '',
   })
 
   const [file, setFile] = useState<File | null>(null)
@@ -136,7 +140,8 @@ export default function ReportPage() {
       
       try {
         const trimmedText = text.trim();
-        const cleanedText = trimmedText.replace(/[^\x20-\x7E]/g, ''); // Remove non-printable characters
+        const cleanedText = trimmedText.replace('```json','').replace(/```$/,'');
+        // Remove non-printable characters
         const parsedResult = JSON.parse(cleanedText);
         console.log('Parsed result:', JSON.stringify(parsedResult, null, 2));
 
@@ -172,38 +177,43 @@ export default function ReportPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Status", verificationStatus);
+    console.log("Report",user);
     if (verificationStatus !== 'success' || !user) {
       toast.error('Please verify the waste before submitting or log in.');
       return;
     }
-    
+   
     setIsSubmitting(true);
     try {
+      console.log("id", user, user.id)
       const report = await createReport(
         user.id,
         newReport.location,
         newReport.type,
         newReport.amount,
+        newReport.description,
         preview || undefined,
         verificationResult ? JSON.stringify(verificationResult) : undefined
       ) as any;
-      
+      console.log("report",report);
       const formattedReport = {
         id: report.id,
         location: report.location,
         wasteType: report.wasteType,
         amount: report.amount,
+        description: report.description,
         createdAt: report.createdAt.toISOString().split('T')[0]
       };
       
       setReports([formattedReport, ...reports]);
-      setNewReport({ location: '', type: '', amount: '' });
+      setNewReport({ location: '', type: '', amount: '', description:'' });
       setFile(null);
       setPreview(null);
       setVerificationStatus('idle');
       setVerificationResult(null);
       
-
+     
       toast.success(`Report submitted successfully! You've earned points for reporting waste.`);
     } catch (error) {
       console.error('Error submitting report:', error);
@@ -216,12 +226,14 @@ export default function ReportPage() {
   useEffect(() => {
     const checkUser = async () => {
       const email = localStorage.getItem('userEmail');
+      console.log("email",email);
       if (email) {
         let user = await getUserByEmail(email);
-        if (!user) {
-          user = await createUser(email, 'Anonymous User');
+        console.log("user", user);
+        if(user){
+          setUser(user);
         }
-        setUser(user);
+       
         
         const recentReports = await getRecentReports();
         const formattedReports = recentReports.map(report => ({
@@ -307,7 +319,7 @@ export default function ReportPage() {
             <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">Location</label>
             {isLoaded ? (
               <StandaloneSearchBox
-               
+              
               >
                 <input
                   type="text"
@@ -359,6 +371,20 @@ export default function ReportPage() {
               className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300 bg-gray-100"
               placeholder="Verified amount"
               readOnly
+            />
+          </div>
+          <div>
+            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              value={newReport.description}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300 "
+              placeholder="Description"
+            
             />
           </div>
         </div>

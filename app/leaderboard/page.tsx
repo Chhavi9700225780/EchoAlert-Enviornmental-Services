@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { getAllRewards,getAvailableRewards, getUserByEmail } from '@/utils/db/actions'
+import { getAllRewards,getAvailableRewards, getUserBalance, getUserByEmail } from '@/utils/db/actions'
 import { Loader, Award, User, Trophy, Crown } from 'lucide-react'
 import { toast } from 'react-hot-toast';
 import './styles.css';
@@ -17,9 +17,62 @@ type Reward = {
 export default function LeaderboardPage() {
   const [rewards, setRewards] = useState<Reward[]>([])
   const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<{ id: number; email: string; name: string } | null>(null)
+  const [lastId, setLastId] = useState<number>(0); // To keep track of the last used ID
 
-  useEffect(() => {
+  const [user, setUser] = useState<{ id: number; email: string; name: string } | null>(null)
+const [balance, setBalance] = useState(0);
+useEffect(() => {
+  const fetchUserBalance = async () => {
+    setLoading(true)
+    const userEmail = localStorage.getItem('userEmail')
+    try{
+    if (userEmail) {
+      const user = await getUserByEmail(userEmail);
+      if (user) {
+        const userBalance = await getUserBalance(user.id);
+        console.log("User Balance chhave:", userBalance);
+        const newReward: Reward = {
+          id: lastId + 1,// Generating a random ID for the new reward, replace with actual logic if necessary
+          userId: user.id,
+          points: userBalance, // Assuming the balance is the user's points for this example
+          level: 1, // You can adjust this based on your logic or user's level
+          createdAt: new Date(), // Current timestamp
+          userName: user.name || null, // Set user name if available
+        };
+        
+        setRewards((prevRewards) => {
+          // Check if the user already has a reward entry
+          const existingRewardIndex = prevRewards.findIndex((reward) => reward.userId === user.id);
+          if (existingRewardIndex !== -1) {
+            // Update the existing reward if the user already has one
+            const updatedRewards = [...prevRewards];
+            updatedRewards[existingRewardIndex] = newReward;
+            return updatedRewards;
+          } else {
+            // If the user doesn't have a reward, append the new reward
+            return [...prevRewards, newReward];
+          }
+        });
+        setBalance(userBalance);
+        setLastId((prevId) => prevId + 1);
+    
+        // Set the new rewards array by appending the new reward to the previous rewards
+       
+      }
+    }}catch (error) {
+      console.error('Error fetching rewards and user:', error)
+      toast.error('Failed to load leaderboard. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  };
+
+  fetchUserBalance();
+
+  // Add an event listener for balance updates
+ 
+},  []);
+ /*k useEffect(() => {
     const fetchRewardsAndUser = async () => {
       setLoading(true)
       try {
@@ -67,8 +120,8 @@ export default function LeaderboardPage() {
     }
 
     fetchRewardsAndUser()
-  }, [])
-
+  }, [])*/
+ 
   return (
     <div className="">
       <div className="max-w-3xl mx-auto leader  p-4">

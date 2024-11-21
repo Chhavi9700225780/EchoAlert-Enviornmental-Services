@@ -1,10 +1,10 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Trash2, MapPin, CheckCircle, Clock, ArrowRight, Camera, Upload, Loader, Calendar, Weight, Search } from 'lucide-react'
+import { Trash2, MapPin, CheckCircle, Clock, ArrowRight, Camera, Upload, Loader, Calendar, Weight, Search, Filter } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { toast } from 'react-hot-toast'
-import { getWasteCollectionTasks, updateTaskStatus, saveReward, saveCollectedWaste, getUserByEmail } from '@/utils/db/actions'
+import { getWasteCollectionTasks, updateTaskStatus, saveReward, saveCollectedWaste, getUserByEmail, getOrgByEmail } from '@/utils/db/actions'
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
 // Make sure to set your Gemini API key in your environment variables
@@ -28,16 +28,22 @@ export default function CollectPage() {
   const [hoveredWasteType, setHoveredWasteType] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const [user, setUser] = useState<{ id: number; email: string; name: string } | null>(null)
+  const [user, setUser] = useState<{  id: number;
+    email: string;
+    password: string;
+    createdAt: Date;
+    companyName: string;
+    workType: string;
+    location: string; } | null>(null)
 
   useEffect(() => {
     const fetchUserAndTasks = async () => {
       setLoading(true)
       try {
         // Fetch user
-        const userEmail = localStorage.getItem('userEmail')
+        const userEmail = localStorage.getItem('orgEmail')
         if (userEmail) {
-          const fetchedUser = await getUserByEmail(userEmail)
+          const fetchedUser = await getOrgByEmail(userEmail)
           if (fetchedUser) {
             setUser(fetchedUser)
           } else {
@@ -151,7 +157,7 @@ export default function CollectPage() {
       
       try {
         const trimmedText = text.trim();
-        const cleanedText = trimmedText.replace(/[^\x20-\x7E]/g, ''); // Remove non-printable characters
+        const cleanedText = trimmedText.replace('```json','').replace(/```$/,''); // Remove non-printable characters
         const parsedResult = JSON.parse(cleanedText);
         
         setVerificationResult({
@@ -166,16 +172,11 @@ export default function CollectPage() {
           const earnedReward = Math.floor(Math.random() * 50) + 10 // Random reward between 10 and 59
           
           // Save the reward
-          await saveReward(user.id, earnedReward)
-
+         
           // Save the collected waste
           await saveCollectedWaste(selectedTask.id, user.id, parsedResult)
 
-          setReward(earnedReward)
-          toast.success(`Verification successful! You earned ${earnedReward} tokens!`, {
-            duration: 5000,
-            position: 'top-center',
-          })
+         
         } else {
           toast.error('Verification failed. The collected waste does not match the reported waste.', {
             duration: 5000,
@@ -206,8 +207,18 @@ export default function CollectPage() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold mb-6 text-gray-800">Waste Collection Tasks</h1>
-      
+     <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Waste Collections Tasks</h1>
+            <p className="text-gray-600 mt-2">
+              Monitor and manage waste collection reports
+            </p>
+          </div>
+          <Button className="gap-2">
+            <Filter size={16} />
+            Filters
+          </Button>
+        </div>
       <div className="mb-4 flex items-center">
         <Input
           type="text"
@@ -221,6 +232,7 @@ export default function CollectPage() {
         </Button>
       </div>
 
+     
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <Loader className="animate-spin h-8 w-8 text-gray-500" />
@@ -277,7 +289,7 @@ export default function CollectPage() {
                     <span className="text-yellow-600 text-sm font-medium">In progress by another collector</span>
                   )}
                   {task.status === 'verified' && (
-                    <span className="text-green-600 text-sm font-medium">Reward Earned</span>
+                    <span className="text-green-600 text-sm font-medium">Completed</span>
                   )}
                 </div>
               </div>
@@ -313,7 +325,7 @@ export default function CollectPage() {
             <p className="mb-4 text-sm text-gray-600">Upload a photo of the collected waste to verify and earn your reward.</p>
             <div className="mb-4">
               <label htmlFor="verification-image" className="block text-sm font-medium text-gray-700 mb-2">
-                Upload Image
+                Upload Image Before Collection of waste
               </label>
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                 <div className="space-y-1 text-center">
@@ -325,6 +337,26 @@ export default function CollectPage() {
                     >
                       <span>Upload a file</span>
                       <input id="verification-image" name="verification-image" type="file" className="sr-only" onChange={handleImageUpload} accept="image/*" />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                </div>
+              </div>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="verification-image" className="block text-sm font-medium text-gray-700 mb-2">
+                Upload Image After Collection of waste
+              </label>
+              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="space-y-1 text-center">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="flex text-sm text-gray-600">
+                    <label
+                      htmlFor="verification-image"
+                      className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                    >
+                      <span>Upload a file</span>
+                      <input id="verification-image" name="verification-image" type="file" className="sr-only" accept="image/*" />
                     </label>
                   </div>
                   <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
